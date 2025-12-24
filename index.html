@@ -166,10 +166,59 @@
 
         /* Carta que forma par correto */
         .carta.par-correto {
-            border-color: #4CAF50;
-            background: #E8F5E9;
             cursor: default;
             animation: pulso-sucesso 0.6s ease;
+        }
+
+        /* Cores diferentes para cada par correto */
+        .carta.par-correto.cor-par-1 {
+            border-color: #4CAF50;
+            background: #E8F5E9;
+        }
+
+        .carta.par-correto.cor-par-2 {
+            border-color: #E91E63;
+            background: #FCE4EC;
+        }
+
+        .carta.par-correto.cor-par-3 {
+            border-color: #2196F3;
+            background: #E3F2FD;
+        }
+
+        .carta.par-correto.cor-par-4 {
+            border-color: #FF9800;
+            background: #FFF3E0;
+        }
+
+        .carta.par-correto.cor-par-5 {
+            border-color: #9C27B0;
+            background: #F3E5F5;
+        }
+
+        .carta.par-correto.cor-par-6 {
+            border-color: #00BCD4;
+            background: #E0F7FA;
+        }
+
+        .carta.par-correto.cor-par-7 {
+            border-color: #FF5722;
+            background: #FBE9E7;
+        }
+
+        .carta.par-correto.cor-par-8 {
+            border-color: #CDDC39;
+            background: #F9FBE7;
+        }
+
+        .carta.par-correto.cor-par-9 {
+            border-color: #607D8B;
+            background: #ECEFF1;
+        }
+
+        .carta.par-correto.cor-par-10 {
+            border-color: #795548;
+            background: #EFEBE9;
         }
 
         /* Carta bloqueada (já emparelhada) */
@@ -668,8 +717,11 @@
                 setTimeout(() => {
                     carta1.classList.remove('selecionada');
                     carta2.classList.remove('selecionada');
-                    carta1.classList.add('par-correto', 'bloqueada');
-                    carta2.classList.add('par-correto', 'bloqueada');
+                    
+                    // Adiciona classe de par correto com cor específica
+                    const classeCor = `cor-par-${idPar1}`;
+                    carta1.classList.add('par-correto', 'bloqueada', classeCor);
+                    carta2.classList.add('par-correto', 'bloqueada', classeCor);
                     
                     paresEncontrados++;
                     cartasSelecionadas = [];
