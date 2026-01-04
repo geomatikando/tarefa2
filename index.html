@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dorminhoco Digital – Desafia o Tablet</title>
+    <title>Jogo da Carta Dorminhoca</title>
     
     <!-- MathJax para renderizar expressões matemáticas em LaTeX -->
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -126,12 +126,13 @@
             transform: translateY(0);
         }
 
-        /* Grelha de cartas */
+        /* Grelha de cartas - MODIFICADO PARA 2 COLUNAS FIXAS */
         .grelha-cartas {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(5, 1fr);
             gap: 15px;
-            max-width: 1200px;
+            max-width: 600px;
             width: 100%;
             margin-bottom: 30px;
         }
@@ -181,11 +182,6 @@
             background: #FCE4EC;
         }
 
-        .carta.par-correto.cor-par-3 {
-            border-color: #2196F3;
-            background: #E3F2FD;
-        }
-
         .carta.par-correto.cor-par-4 {
             border-color: #FF9800;
             background: #FFF3E0;
@@ -224,6 +220,15 @@
         /* Carta bloqueada (já emparelhada) */
         .carta.bloqueada {
             opacity: 0.6;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* Espaço vazio invisível */
+        .carta.vazio {
+            background: transparent;
+            box-shadow: none;
+            border: none;
             cursor: default;
             pointer-events: none;
         }
@@ -357,7 +362,7 @@
         /* Responsividade para tablets */
         @media (max-width: 768px) {
             .grelha-cartas {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                max-width: 500px;
                 gap: 10px;
             }
 
@@ -387,7 +392,7 @@
 
         @media (max-width: 480px) {
             .grelha-cartas {
-                grid-template-columns: repeat(2, 1fr);
+                max-width: 400px;
             }
 
             .painel-stats {
@@ -398,16 +403,21 @@
             .stat-item {
                 min-width: auto;
             }
+
+            .carta {
+                font-size: 0.9em;
+                min-height: 90px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>🎯 Dorminhoco Digital – Desafia o Tablet</h1>
+        <h1>🎯 Jogo da Carta Dorminhoca</h1>
     </header>
 
     <div class="instrucoes">
-        <p><strong>📋 Instruções:</strong> Forma pares entre expressão fatorada e expressão desenvolvida. No fim, identifica a carta que fica sem par (dorminhoca).</p>
+        <p><strong>📋 Instruções:</strong> Forma pares entre a expressão algébrica do quadrado de um binómio e o respetivo trinómio(polinómio reduzido). No fim, identifica a carta que fica sem par (dorminhoca).</p>
     </div>
 
     <!-- Painel de estatísticas -->
@@ -450,29 +460,28 @@
         // ============================================================
         // CONFIGURAÇÃO DAS CARTAS
         // ============================================================
-        // Aqui podes adicionar, remover ou editar cartas facilmente.
         // Cada par tem o mesmo 'idPar'.
         // A carta dorminhoca tem 'idPar: null' e 'dorminhoca: true'.
         
         const cartas = [
             // Par 1: (x+3)² - Verde 🟢
-            { id: 1, expressao: '(x+3)^2', idPar: 1, dorminhoca: false },
-            { id: 2, expressao: 'x^2 + 6x + 9', idPar: 1, dorminhoca: false },
+            { id: 1, expressao: '(x+3)^2', idPar: 1, dorminhoca: false, tipo: 'fatorada' },
+            { id: 2, expressao: 'x^2 + 6x + 9', idPar: 1, dorminhoca: false, tipo: 'desenvolvida' },
             
             // Par 2: (x-2)² - Vermelho 🔴
-            { id: 3, expressao: '(x-2)^2', idPar: 2, dorminhoca: false },
-            { id: 4, expressao: 'x^2 - 4x + 4', idPar: 2, dorminhoca: false },
+            { id: 3, expressao: '(x-2)^2', idPar: 2, dorminhoca: false, tipo: 'fatorada' },
+            { id: 4, expressao: 'x^2 - 4x + 4', idPar: 2, dorminhoca: false, tipo: 'desenvolvida' },
             
             // Par 3: (x+7)² - Laranja 🟠
-            { id: 5, expressao: '(x+7)^2', idPar: 4, dorminhoca: false },
-            { id: 6, expressao: 'x^2 + 14x + 49', idPar: 4, dorminhoca: false },
+            { id: 5, expressao: '(x+7)^2', idPar: 4, dorminhoca: false, tipo: 'fatorada' },
+            { id: 6, expressao: 'x^2 + 14x + 49', idPar: 4, dorminhoca: false, tipo: 'desenvolvida' },
             
             // Par 4: (x-4)² - Roxo 🟣
-            { id: 7, expressao: '(x-4)^2', idPar: 5, dorminhoca: false },
-            { id: 8, expressao: 'x^2 - 8x + 16', idPar: 5, dorminhoca: false },
+            { id: 7, expressao: '(x-4)^2', idPar: 5, dorminhoca: false, tipo: 'fatorada' },
+            { id: 8, expressao: 'x^2 - 8x + 16', idPar: 5, dorminhoca: false, tipo: 'desenvolvida' },
             
             // Carta DORMINHOCA (sem par)
-            { id: 9, expressao: 'x^2 + 2x + 1', idPar: null, dorminhoca: true }
+            { id: 9, expressao: 'x^2 + 2x + 1', idPar: null, dorminhoca: true, tipo: 'desenvolvida' }
         ];
 
         // ============================================================
@@ -486,7 +495,6 @@
         // ============================================================
         // VARIÁVEIS DE PONTUAÇÃO E TEMPO
         // ============================================================
-        // PARÂMETROS CONFIGURÁVEIS - Altere aqui para ajustar o sistema de pontuação
         const PONTUACAO_INICIAL = 1000; // Pontuação inicial
         const PENALIDADE_ERRO = 10; // Pontos subtraídos por tentativa incorreta
         
@@ -496,14 +504,13 @@
         let cronometroInterval = null; // Referência para o intervalo do cronómetro
 
         // ============================================================
-        // FUNÇÕES PRINCIPAIS
+        // FUNÇÕES DE TEMPO E ESTATÍSTICAS
         // ============================================================
 
         /**
          * Inicia o cronómetro
          */
         function iniciarCronometro() {
-            // Para o cronómetro anterior se existir
             if (cronometroInterval) {
                 clearInterval(cronometroInterval);
             }
@@ -555,7 +562,6 @@
             const display = document.getElementById('pontuacao-display');
             display.textContent = pontuacao;
             
-            // Animação quando perde pontos
             if (pontuacao < PONTUACAO_INICIAL) {
                 display.style.animation = 'none';
                 setTimeout(() => {
@@ -582,7 +588,7 @@
         }
 
         // ============================================================
-        // FUNÇÕES PRINCIPAIS
+        // FUNÇÕES PRINCIPAIS DO JOGO
         // ============================================================
 
         /**
@@ -608,9 +614,8 @@
             // Esconde área de dorminhoca
             document.getElementById('area-dorminhoca').classList.remove('ativa');
             
-            // Baralha e renderiza as cartas
-            const cartasBaralhadas = baralhar([...cartas]);
-            renderizarCartas(cartasBaralhadas);
+            // Renderiza as cartas em 2 colunas
+            renderizarCartasDuasColunas();
             
             // Inicia o cronómetro
             iniciarCronometro();
@@ -620,36 +625,74 @@
          * Baralha um array (algoritmo Fisher-Yates)
          */
         function baralhar(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+            const arrayCopiado = [...array];
+            for (let i = arrayCopiado.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+                [arrayCopiado[i], arrayCopiado[j]] = [arrayCopiado[j], arrayCopiado[i]];
             }
-            return array;
+            return arrayCopiado;
         }
 
         /**
-         * Renderiza as cartas na grelha
+         * Renderiza as cartas em 2 colunas (fatoradas à esquerda, desenvolvidas à direita)
          */
-        function renderizarCartas(cartasArray) {
+        function renderizarCartasDuasColunas() {
             const grelha = document.getElementById('grelha');
             grelha.innerHTML = '';
 
-            cartasArray.forEach(carta => {
-                const divCarta = document.createElement('div');
-                divCarta.className = 'carta';
-                divCarta.dataset.id = carta.id;
-                divCarta.dataset.idPar = carta.idPar;
-                divCarta.dataset.dorminhoca = carta.dorminhoca;
+            // Separa as cartas por tipo
+            const cartasFatoradas = cartas.filter(c => c.tipo === 'fatorada');
+            const cartasDesenvolvidas = cartas.filter(c => c.tipo === 'desenvolvida');
+
+            // Baralha cada grupo separadamente
+            const fatoradasBaralhadas = baralhar(cartasFatoradas);
+            const desenvolvidasBaralhadas = baralhar(cartasDesenvolvidas);
+
+            // Cria array com 5 linhas (máximo entre os dois grupos)
+            const numLinhas = 5;
+            
+            for (let i = 0; i < numLinhas; i++) {
+                // Coluna esquerda (fatoradas)
+                if (i < fatoradasBaralhadas.length) {
+                    criarElementoCarta(fatoradasBaralhadas[i], grelha);
+                } else {
+                    criarEspacoVazio(grelha);
+                }
                 
-                // Usa MathJax para renderizar a expressão
-                divCarta.innerHTML = `\\(${carta.expressao}\\)`;
-                
-                divCarta.onclick = () => clicarCarta(divCarta);
-                grelha.appendChild(divCarta);
-            });
+                // Coluna direita (desenvolvidas)
+                if (i < desenvolvidasBaralhadas.length) {
+                    criarElementoCarta(desenvolvidasBaralhadas[i], grelha);
+                } else {
+                    criarEspacoVazio(grelha);
+                }
+            }
 
             // Atualiza o MathJax para renderizar todas as expressões
             MathJax.typesetPromise([grelha]);
+        }
+
+        /**
+         * Cria um elemento de carta
+         */
+        function criarElementoCarta(carta, container) {
+            const divCarta = document.createElement('div');
+            divCarta.className = 'carta';
+            divCarta.dataset.id = carta.id;
+            divCarta.dataset.idPar = carta.idPar;
+            divCarta.dataset.dorminhoca = carta.dorminhoca;
+            
+            divCarta.innerHTML = `\\(${carta.expressao}\\)`;
+            divCarta.onclick = () => clicarCarta(divCarta);
+            container.appendChild(divCarta);
+        }
+
+        /**
+         * Cria um espaço vazio invisível
+         */
+        function criarEspacoVazio(container) {
+            const divVazio = document.createElement('div');
+            divVazio.className = 'carta vazio';
+            container.appendChild(divVazio);
         }
 
         /**
@@ -791,7 +834,7 @@
                     relatorioHTML
                 );
             } else {
-                // ERRO (não devia acontecer se só restou uma carta, mas por segurança)
+                // ERRO
                 mostrarMensagem(
                     'erro',
                     '❌ Ops!',
@@ -833,7 +876,6 @@
         // ============================================================
         // INICIALIZAÇÃO
         // ============================================================
-        // Inicia o jogo quando a página carrega
         window.onload = () => {
             novoJogo();
         };
