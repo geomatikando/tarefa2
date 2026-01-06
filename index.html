@@ -54,79 +54,7 @@
             color: #333;
         }
 
-        /* Painel de estatísticas */
-        .painel-stats {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px 25px;
-            border-radius: 10px;
-            max-width: 800px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .stat-item {
-            text-align: center;
-            min-width: 120px;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .stat-valor {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .stat-valor.tempo {
-            color: #2196F3;
-        }
-
-        .stat-valor.tentativas {
-            color: #FF9800;
-        }
-
-        .stat-valor.pontuacao {
-            color: #4CAF50;
-        }
-
-        /* Botão Novo Jogo */
-        .controles {
-            margin-bottom: 20px;
-        }
-
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        /* Grelha de cartas - MODIFICADO PARA 2 COLUNAS FIXAS */
+        /* Grelha de cartas - 2 COLUNAS FIXAS */
         .grelha-cartas {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -309,54 +237,19 @@
             margin-top: 15px;
             padding: 10px 25px;
             font-size: 1em;
-        }
-
-        /* Relatório final */
-        .relatorio {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f5f5f5;
-            border-radius: 8px;
-            text-align: left;
-        }
-
-        .relatorio h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .relatorio-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #ddd;
-            font-size: 1.1em;
-        }
-
-        .relatorio-item:last-child {
-            border-bottom: none;
-        }
-
-        .relatorio-label {
-            color: #666;
-            font-weight: bold;
-        }
-
-        .relatorio-valor {
-            color: #333;
-            font-weight: bold;
-        }
-
-        .mensagem-motivadora {
-            margin-top: 15px;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #4CAF50;
             color: white;
+            border: none;
             border-radius: 8px;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .mensagem button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.3);
         }
 
         /* Responsividade para tablets */
@@ -375,33 +268,11 @@
             h1 {
                 font-size: 1.8em;
             }
-
-            .painel-stats {
-                padding: 12px 15px;
-                gap: 10px;
-            }
-
-            .stat-item {
-                min-width: 100px;
-            }
-
-            .stat-valor {
-                font-size: 1.5em;
-            }
         }
 
         @media (max-width: 480px) {
             .grelha-cartas {
                 max-width: 400px;
-            }
-
-            .painel-stats {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .stat-item {
-                min-width: auto;
             }
 
             .carta {
@@ -418,26 +289,6 @@
 
     <div class="instrucoes">
         <p><strong>📋 Instruções:</strong> Forma pares entre a expressão algébrica do quadrado de um binómio e o respetivo trinómio(polinómio reduzido). No fim, identifica a carta que fica sem par (dorminhoca).</p>
-    </div>
-
-    <!-- Painel de estatísticas -->
-    <div class="painel-stats">
-        <div class="stat-item">
-            <div class="stat-label">⏱️ Tempo</div>
-            <div class="stat-valor tempo" id="tempo-display">0:00</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">🎯 Tentativas</div>
-            <div class="stat-valor tentativas" id="tentativas-display">0</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">⭐ Pontuação</div>
-            <div class="stat-valor pontuacao" id="pontuacao-display">1000</div>
-        </div>
-    </div>
-
-    <div class="controles">
-        <button onclick="novoJogo()">🔄 Novo Jogo</button>
     </div>
 
     <div class="grelha-cartas" id="grelha">
@@ -460,9 +311,6 @@
         // ============================================================
         // CONFIGURAÇÃO DAS CARTAS
         // ============================================================
-        // Cada par tem o mesmo 'idPar'.
-        // A carta dorminhoca tem 'idPar: null' e 'dorminhoca: true'.
-        
         const cartas = [
             // Par 1: (x+3)² - Verde 🟢
             { id: 1, expressao: '(x+3)^2', idPar: 1, dorminhoca: false, tipo: 'fatorada' },
@@ -493,132 +341,24 @@
         let modoIdentificarDorminhoca = false; // Ativa no final do jogo
 
         // ============================================================
-        // VARIÁVEIS DE PONTUAÇÃO E TEMPO
-        // ============================================================
-        const PONTUACAO_INICIAL = 1000; // Pontuação inicial
-        const PENALIDADE_ERRO = 10; // Pontos subtraídos por tentativa incorreta
-        
-        let tempoDecorrido = 0; // Tempo em segundos
-        let tentativas = 0; // Número total de tentativas
-        let pontuacao = PONTUACAO_INICIAL; // Pontuação atual
-        let cronometroInterval = null; // Referência para o intervalo do cronómetro
-
-        // ============================================================
-        // FUNÇÕES DE TEMPO E ESTATÍSTICAS
-        // ============================================================
-
-        /**
-         * Inicia o cronómetro
-         */
-        function iniciarCronometro() {
-            if (cronometroInterval) {
-                clearInterval(cronometroInterval);
-            }
-            
-            tempoDecorrido = 0;
-            cronometroInterval = setInterval(() => {
-                tempoDecorrido++;
-                atualizarDisplayTempo();
-            }, 1000);
-        }
-
-        /**
-         * Para o cronómetro
-         */
-        function pararCronometro() {
-            if (cronometroInterval) {
-                clearInterval(cronometroInterval);
-                cronometroInterval = null;
-            }
-        }
-
-        /**
-         * Formata o tempo em MM:SS
-         */
-        function formatarTempo(segundos) {
-            const minutos = Math.floor(segundos / 60);
-            const segs = segundos % 60;
-            return `${minutos}:${segs.toString().padStart(2, '0')}`;
-        }
-
-        /**
-         * Atualiza o display do tempo
-         */
-        function atualizarDisplayTempo() {
-            document.getElementById('tempo-display').textContent = formatarTempo(tempoDecorrido);
-        }
-
-        /**
-         * Atualiza o display de tentativas
-         */
-        function atualizarDisplayTentativas() {
-            document.getElementById('tentativas-display').textContent = tentativas;
-        }
-
-        /**
-         * Atualiza o display de pontuação
-         */
-        function atualizarDisplayPontuacao() {
-            const display = document.getElementById('pontuacao-display');
-            display.textContent = pontuacao;
-            
-            if (pontuacao < PONTUACAO_INICIAL) {
-                display.style.animation = 'none';
-                setTimeout(() => {
-                    display.style.animation = 'pulso-sucesso 0.3s ease';
-                }, 10);
-            }
-        }
-
-        /**
-         * Gera mensagem motivadora baseada na pontuação
-         */
-        function gerarMensagemMotivadora(pontos) {
-            if (pontos >= 950) {
-                return "🏆 Excelente! Desempenho perfeito!";
-            } else if (pontos >= 850) {
-                return "🌟 Muito bom! Continua assim!";
-            } else if (pontos >= 750) {
-                return "👍 Bom trabalho!";
-            } else if (pontos >= 650) {
-                return "💪 Bom esforço! Podes melhorar!";
-            } else {
-                return "📚 Tenta melhorar o teu tempo e reduzir os erros!";
-            }
-        }
-
-        // ============================================================
         // FUNÇÕES PRINCIPAIS DO JOGO
         // ============================================================
 
         /**
-         * Inicia um novo jogo
+         * Inicia o jogo
          */
-        function novoJogo() {
+        function iniciarJogo() {
             // Reset das variáveis
             cartasSelecionadas = [];
             paresEncontrados = 0;
             aguardandoResposta = false;
             modoIdentificarDorminhoca = false;
             
-            // Reset das estatísticas
-            tempoDecorrido = 0;
-            tentativas = 0;
-            pontuacao = PONTUACAO_INICIAL;
-            
-            // Atualiza displays
-            atualizarDisplayTempo();
-            atualizarDisplayTentativas();
-            atualizarDisplayPontuacao();
-            
             // Esconde área de dorminhoca
             document.getElementById('area-dorminhoca').classList.remove('ativa');
             
             // Renderiza as cartas em 2 colunas
             renderizarCartasDuasColunas();
-            
-            // Inicia o cronómetro
-            iniciarCronometro();
         }
 
         /**
@@ -742,10 +482,6 @@
             const idPar1 = carta1.dataset.idPar;
             const idPar2 = carta2.dataset.idPar;
 
-            // Incrementa tentativas
-            tentativas++;
-            atualizarDisplayTentativas();
-
             // Verifica se ambas pertencem ao mesmo par (e não são dorminhocos)
             if (idPar1 === idPar2 && idPar1 !== 'null') {
                 // PAR CORRETO!
@@ -766,10 +502,7 @@
                     verificarFimDeJogo();
                 }, 300);
             } else {
-                // NÃO FORMAM PAR - PENALIZA
-                pontuacao = Math.max(0, pontuacao - PENALIDADE_ERRO);
-                atualizarDisplayPontuacao();
-                
+                // NÃO FORMAM PAR
                 setTimeout(() => {
                     carta1.classList.remove('selecionada');
                     carta2.classList.remove('selecionada');
@@ -800,38 +533,13 @@
             const isDorminhoca = elementoCarta.dataset.dorminhoca === 'true';
 
             if (isDorminhoca) {
-                // SUCESSO! Para o cronómetro
-                pararCronometro();
+                // SUCESSO!
                 elementoCarta.classList.add('par-correto');
-                
-                // Gera o relatório final
-                const mensagemMotivadora = gerarMensagemMotivadora(pontuacao);
-                const relatorioHTML = `
-                    <div class="relatorio">
-                        <h3>📊 Relatório Final</h3>
-                        <div class="relatorio-item">
-                            <span class="relatorio-label">⏱️ Tempo Total:</span>
-                            <span class="relatorio-valor">${formatarTempo(tempoDecorrido)}</span>
-                        </div>
-                        <div class="relatorio-item">
-                            <span class="relatorio-label">🎯 Tentativas:</span>
-                            <span class="relatorio-valor">${tentativas}</span>
-                        </div>
-                        <div class="relatorio-item">
-                            <span class="relatorio-label">⭐ Pontuação Final:</span>
-                            <span class="relatorio-valor">${pontuacao} pontos</span>
-                        </div>
-                    </div>
-                    <div class="mensagem-motivadora">
-                        ${mensagemMotivadora}
-                    </div>
-                `;
                 
                 mostrarMensagem(
                     'sucesso',
                     '🎉 Parabéns!',
-                    'Identificaste todos os pares e a carta dorminhoca corretamente!',
-                    relatorioHTML
+                    'Identificaste todos os pares e a carta dorminhoca corretamente!'
                 );
             } else {
                 // ERRO
@@ -846,7 +554,7 @@
         /**
          * Mostra uma mensagem de feedback
          */
-        function mostrarMensagem(tipo, titulo, texto, htmlAdicional = '') {
+        function mostrarMensagem(tipo, titulo, texto) {
             const mensagem = document.getElementById('mensagem');
             const mensagemTitulo = document.getElementById('mensagem-titulo');
             const mensagemTexto = document.getElementById('mensagem-texto');
@@ -854,11 +562,6 @@
             mensagem.className = `mensagem ativa ${tipo}`;
             mensagemTitulo.textContent = titulo;
             mensagemTexto.textContent = texto;
-            
-            // Adiciona HTML adicional (relatório) se fornecido
-            if (htmlAdicional) {
-                mensagemTexto.insertAdjacentHTML('afterend', htmlAdicional);
-            }
         }
 
         /**
@@ -867,17 +570,13 @@
         function fecharMensagem() {
             const mensagem = document.getElementById('mensagem');
             mensagem.classList.remove('ativa');
-            
-            // Remove relatórios antigos
-            const relatorios = mensagem.querySelectorAll('.relatorio, .mensagem-motivadora');
-            relatorios.forEach(r => r.remove());
         }
 
         // ============================================================
         // INICIALIZAÇÃO
         // ============================================================
         window.onload = () => {
-            novoJogo();
+            iniciarJogo();
         };
     </script>
 </body>
